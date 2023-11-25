@@ -15,7 +15,7 @@ export const PUT = async (
     req: NextRequest,
     { params }: { params: { id: string } }
 ) => {
-    connectToDB();
+    connectToDB(); 
 
     const {
         name,
@@ -28,7 +28,7 @@ export const PUT = async (
     const userId = params.id;
 
     try {
-        await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             { id: userId },
             {
                 username: username.toLowerCase(),
@@ -43,7 +43,7 @@ export const PUT = async (
             revalidatePath(path);  // Make sure the next time someone visits this specific page, they get the latest and freshest content, not what's saved in the cache
         }
 
-        return NextResponse.json({ message: "Updated successfully" });
+        return NextResponse.json({ message: "Updated successfully"});
 
     } catch (error: any) {
         throw new Error("Failed to update/create user: ", error.message);
@@ -53,15 +53,17 @@ export const PUT = async (
 
 export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
     connectToDB();
-
+    
     const { id } = params;     
+    console.log("ID", id);
+
     try {
         const user = await User.findOne({ id });
         //  .populate({
         //     path: 'communities',
         //     model: 'Community'
         //  });
-        console.log(user);
+        console.log("User", user);
         
         return NextResponse.json(user);
 

@@ -69,14 +69,29 @@ export const createPost = async ({
   }
 };
 
-export const fetchUser = async ({ id }: { id: string }) => {
+export const fetchUser = async ({ id }: { id: string | undefined }) => {  
   console.log(id);
-
+     
   try {
     const { data } = await axios({
       url: `/api/users/${id}`,
       method: "GET",
     });
+    console.log(data);    
+    return data;
+    
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const fetchPost = async ( id : string ) => { 
+  try {
+    const { data } = await axios({
+      url: `/api/post/${id}`,
+      method: "GET",
+    });  
     return data;
     
   } catch (error) {
