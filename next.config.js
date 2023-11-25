@@ -4,8 +4,14 @@ const nextConfig = {
     //   // serverActions: true,
     //   serverComponentsExternalPackages: ["mongoose"],
     // },
-    images: {
-      remotePatterns: [
+    images: { 
+      remotePatterns: [ 
+        // {
+        //   protocol: "http",
+        //   hostname: "localhost",    // Add Domains here for next/Image to work
+        //   port: "3000",
+        //   pathname: "/",
+        // },
         {
           protocol: "https",
           hostname: "img.clerk.com",

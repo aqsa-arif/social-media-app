@@ -4,15 +4,14 @@ import PostCard from "@/components/cards/PostCard";
 import { fetchPosts } from "@/lib/apiConfig" 
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query"
-
+ 
 export default function Home() {
   const { user } = useUser();   
+  
   const { data : postsData } = useQuery({
     queryKey: ["posts"],
     queryFn: () => fetchPosts(1, 30)
-  })  
-  console.log(postsData?.post);
-  
+  })     
 
   return (
     <div>
@@ -25,7 +24,7 @@ export default function Home() {
             <>
             {
                postsData?.posts?.map((post) => {
-                return <PostCard key={post._id} {...post} userId={user?.id} />
+                return <PostCard key={post._id} {...post} currentUserId={user?.id} />
               })
             }
             </>
