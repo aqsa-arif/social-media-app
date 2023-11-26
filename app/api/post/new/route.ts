@@ -41,3 +41,4 @@ export const POST = async (req: NextRequest) => {
         throw new Error("Failed to create post : ", error.message);
     }
 };
+
