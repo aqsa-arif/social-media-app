@@ -1,7 +1,7 @@
 "use client";
 
-import { createPost, fetchUser } from "@/lib/apiConfig";
-import { useQuery } from "@tanstack/react-query";
+import { createCommentPost, createPost, fetchUser } from "@/lib/apiConfig";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 
@@ -35,6 +35,7 @@ const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
 
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // const { data: userInfo, error } = useQuery({
   //   queryKey: ["users", { id: userId }],
@@ -57,10 +58,10 @@ const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
   });
 
   const { mutate } = useMutation({
-    mutationFn: createPost,
+    mutationFn: createCommentPost,
     onSuccess: (data) => {
-      console.log(data);
-      router.push("/");
+      form.reset(); 
+      queryClient.invalidateQueries({ queryKey: ["posts"], })      
     },
     onError: (error) => {
       console.log(error);
@@ -69,9 +70,9 @@ const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
 
   async function onSubmit(values: z.infer<typeof CommentValidation>) {
     mutate({
+      postId,
       text: values.post,
-      author: userInfo._id,
-      communityId: null,
+      userId,
       path: pathname,
     });
   }
@@ -85,20 +86,22 @@ const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
           render={({ field }) => (
             <FormItem className="flex items-center w-full gap-3">
               <FormLabel>
-                <Image
-                  loader={() => userImgUrl}
-                  src={userImgUrl} 
-                  alt="Profile Image"
-                  width={48}
-                  height={48}
-                  className="rounded-full"
-                />
+                <div className="relative w-12 h-12">
+                  <Image
+                    loader={() => userImgUrl}
+                    src={userImgUrl}
+                    alt="Profile Image"
+                    fill 
+                    className="rounded-full"
+                  />
+                </div>
               </FormLabel>
               <FormControl className="border-none bg-transparent">
                 <Input
                   type="text"
                   placeholder="Comment..."
                   className="no-focus text-light-1 outline-none"
+                  autoComplete="off"
                   {...field}
                 />
               </FormControl>

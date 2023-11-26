@@ -35,7 +35,7 @@ const PostCard = ({
   author,
   community,
   createdAt,
-  children: comments,
+  children,
   currentUserId,
   isComment,
 }: Props) => {
@@ -47,12 +47,16 @@ const PostCard = ({
     author,
     community,
     createdAt,
-    comments,
+    children,
     currentUserId
   );
 
   return (
-    <article className="flex flex-col w-full rounded-xl bg-dark-2 p-7">
+    <article
+      className={`flex flex-col w-full rounded-xl ${
+        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7 "
+      }`}
+    >
       <div className="flex justify-between items-start">
         <div className="flex w-full flex-1 flex-row gap-4">
           <div className="flex flex-col items-center">
@@ -77,18 +81,19 @@ const PostCard = ({
                 {author?.name}
               </h4>
             </Link>
-            <p className="mt-2 mb-4 text-small-regular text-light-2">{text}</p>
+            <p className="mt-2 mb-1 text-small-regular text-light-2">{text}</p>
             {photo && (
               <Image
                 loader={() => photo}
                 src={photo}
                 alt="Post Image"
                 width={480}
-                height={230}  
+                height={230}
+                className="rounded-lg mt-6"
               />
             )}
 
-            <div className="mt-5 flex flex-col gap-3">
+            <div className="mt-5 flex flex-col gap-3 mb-7">
               <div className="flex gap-3.5">
                 <Image
                   src={"/assets/heart-gray.svg"}
@@ -122,10 +127,10 @@ const PostCard = ({
                 />
               </div>
 
-              {isComment && comments?.length && (
-                <Link href={`posts/${_id}`}>
-                  <p className="mt-1 text-subtle-medium text-gray-1 ">
-                    {comments.length} replies
+              {children?.length > 0 && (
+                <Link href={`/posts/${_id}`}>
+                  <p className="mt-1 text-subtle-medium text-gray-1">
+                    {children.length} replies
                   </p>
                 </Link>
               )}

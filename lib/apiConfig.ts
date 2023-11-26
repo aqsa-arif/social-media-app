@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ObjectId } from "mongoose"; 
+import { ObjectId } from "mongoose";
 
 interface Params {
   id: string;
@@ -69,49 +69,80 @@ export const createPost = async ({
   }
 };
 
-export const fetchUser = async ({ id }: { id: string | undefined }) => {  
+export const fetchUser = async ({ id }: { id: string | undefined }) => {
   console.log(id);
-     
+
   try {
     const { data } = await axios({
       url: `/api/users/${id}`,
       method: "GET",
     });
-    console.log(data);    
+    console.log(data);
     return data;
-    
+
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
-export const fetchPost = async ( id : string ) => { 
+export const fetchPost = async (id: string) => {
   try {
     const { data } = await axios({
       url: `/api/post/${id}`,
       method: "GET",
-    });  
+    });
     return data;
-    
+
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
-export const fetchPosts = async (pageNumber = 1, pageSizeLimit = 20) => { 
+export const fetchPosts = async (pageNumber = 1, pageSizeLimit = 20) => {
   try {
     const { data } = await axios({
       url: `/api/post`,
       method: "GET",
       params: {
-       pageNumber,
-       pageSizeLimit 
+        pageNumber,
+        pageSizeLimit
       }
     });
     return data;
-    
+
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+
+export const createCommentPost = async ({
+  text,  
+  postId,
+  userId,
+  path,
+}: {
+  text: string; 
+  postId: string,
+  userId: string,
+  path: string;
+}) => { 
+  try {
+    const { data } = await axios({
+      url: `/api/comment/new`,
+      method: "POST",
+      data: {
+        text,  
+        postId,
+        userId,
+        path,
+      },
+    });
+    return data;
+
   } catch (error) {
     console.log(error);
     throw error;
