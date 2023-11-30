@@ -1,6 +1,9 @@
+import React from "react";
+import { addLike, removeLike } from "@/lib/apiConfig";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useUser } from "@clerk/nextjs";
 
 interface Props {
   _id: string;
@@ -23,6 +26,7 @@ interface Props {
       image: string;
     };
   }[];
+  likes: string[] | null | undefined;
   currentUserId: string;
   isComment?: boolean;
 }
@@ -36,6 +40,7 @@ const PostCard = ({
   community,
   createdAt,
   children,
+  likes,
   currentUserId,
   isComment,
 }: Props) => {
@@ -48,8 +53,40 @@ const PostCard = ({
     community,
     createdAt,
     children,
+    likes,
     currentUserId
   );
+
+  const { user } = useUser();
+  const queryClient = useQueryClient();
+  console.log(user?.id);
+  console.log(likes);
+
+  const { mutate: likPostMutate } = useMutation({
+    mutationFn: addLike,
+    onSuccess: (data) => {
+      if (data.success) {
+        console.log(data);
+        queryClient.invalidateQueries({ queryKey: ["posts"] });
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const { mutate: dislikePostMutate } = useMutation({
+    mutationFn: removeLike,
+    onSuccess: (data) => {
+      if (data.success) {
+        console.log(data);
+        queryClient.invalidateQueries({ queryKey: ["posts"] });
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   return (
     <article
@@ -93,15 +130,30 @@ const PostCard = ({
               />
             )}
 
-            <div className="mt-5 flex flex-col gap-3 mb-7">
+            <div className="mt-5 flex flex-col gap-3">
               <div className="flex gap-3.5">
-                <Image
-                  src={"/assets/heart-gray.svg"}
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
-                />
+                <button type="button" >
+                  {likes?.length && likes.includes(_id) ? (
+                    <Image
+                      src={"/assets/red-heart.svg"}
+                      alt="heart"
+                      width={20}
+                      height={20}
+                      className="cursor-pointer object-contain"
+                      onClick={() => dislikePostMutate(_id) }
+                    />
+                  ) : (
+                    <Image
+                      src={"/assets/heart-gray.svg"}
+                      alt="heart"
+                      width={24}
+                      height={24}
+                      className="cursor-pointer object-contain"
+                      onClick={() => likPostMutate(_id)}
+                    />
+                  )}
+                </button>
+
                 <Link href={`/posts/${_id}`}>
                   <Image
                     src={"/assets/reply.svg"}
@@ -127,13 +179,23 @@ const PostCard = ({
                 />
               </div>
 
+              <div className="flex items-center gap-4">
               {children?.length > 0 && (
                 <Link href={`/posts/${_id}`}>
                   <p className="mt-1 text-subtle-medium text-gray-1">
-                    {children.length} replies
+                    {children.length} { children.length > 1 ? 'replies' : 'reply'}  
                   </p>
                 </Link>
+              )} 
+
+              {likes && likes?.length > 0 && (
+                <p className="mt-1 text-subtle-medium text-gray-1">
+                  {" "}
+                 {likes.length} {likes?.length > 1 ? 'likes' : 'like'} 
+                </p>
               )}
+              </div>
+              
             </div>
           </div>
         </div>

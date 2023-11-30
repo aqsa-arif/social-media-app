@@ -148,3 +148,34 @@ export const createCommentPost = async ({
     throw error;
   }
 };
+
+export const addLike = async ( id : string ) => {
+  try {
+    const { data } = await axios({
+      url: `/api/post/${id}/like`,
+      method: "PUT", 
+    });
+    console.log(data);    
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const removeLike = async ( id : string ) => {
+  try {
+    const { data } = await axios({
+      url: `/api/post/${id}/dislike`,
+      method: "PUT", 
+    });
+    console.log(data);    
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
