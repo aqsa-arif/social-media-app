@@ -41,7 +41,7 @@ const page = ({ params }: { params: { id: string } }) => {
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 flex flex-col gap-6">
         {singlePost?.children?.map((comment: any) => {
           return (
             <PostCard

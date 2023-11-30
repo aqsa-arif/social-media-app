@@ -22,6 +22,10 @@ const postSchema = new mongoose.Schema({
     parentId: {
         type: String
     },
+    likes: {
+        type: [String], 
+        default: [] 
+    },
     children: [
         {
             type: mongoose.Schema.Types.ObjectId,
