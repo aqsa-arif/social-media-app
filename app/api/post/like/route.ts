@@ -1,27 +1,31 @@
 import Post from "@/lib/models/post.model";
+import { connectToDB } from "@/lib/mongoose";
 import { NextRequest, NextResponse } from "next/server";
+ 
 
-// =======================
-// Like post functionality
-// =======================
+export const PUT = async (req: NextRequest) => {
+    connectToDB();
+    const { postId, userId } = await req.json();
 
-export const PUT = async (req: NextRequest, { params} : { params: { id: string } }) => { 
-    console.log(params.id);
-    
+    console.log("Post Id ",postId);
+    console.log(userId);
+
     try {
-        await Post.findByIdAndUpdate(
-            params.id,
+        const updated = await Post.findByIdAndUpdate(
+            postId,
             {
-                $addToSet: { likes: params.id }, 
+                $addToSet: { likes: userId },
             },
-        );  
-        
+        );
+
+        console.log(updated);
+
         return NextResponse.json({
             success: true,
             message: 'You liked a video',
         })
     }
-    catch (error : any) {
+    catch (error: any) {
         const status = error.status || 500;
         const message = error.message || 'Something went wrong';
         return NextResponse.json({

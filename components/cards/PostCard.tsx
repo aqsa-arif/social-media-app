@@ -1,6 +1,6 @@
 import React from "react";
-import { addLike, removeLike } from "@/lib/apiConfig";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addLike, fetchUser, removeLike } from "@/lib/apiConfig";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
@@ -43,24 +43,17 @@ const PostCard = ({
   likes,
   currentUserId,
   isComment,
-}: Props) => {
-  console.log(
-    _id,
-    parentId,
-    text,
-    photo,
-    author,
-    community,
-    createdAt,
-    children,
-    likes,
-    currentUserId
-  );
-
+}: Props) => { 
   const { user } = useUser();
-  const queryClient = useQueryClient();
-  console.log(user?.id);
+  const queryClient = useQueryClient(); 
+   
+  const { data: userInfo } = useQuery({
+    queryKey: ["users", { id: user?.id }],
+    queryFn: () => fetchUser({ id: user?.id }),
+  });
+  console.log(userInfo);
   console.log(likes);
+  
 
   const { mutate: likPostMutate } = useMutation({
     mutationFn: addLike,
@@ -130,17 +123,17 @@ const PostCard = ({
               />
             )}
 
-            <div className="mt-5 flex flex-col gap-3">
+            <div className={`mt-5 flex flex-col gap-3 ${isComment && 'mb-10'}`}>
               <div className="flex gap-3.5">
-                <button type="button" >
-                  {likes?.length && likes.includes(_id) ? (
+                <button type="button" > 
+                  {likes?.length && likes.includes(userInfo?._id) ? (
                     <Image
                       src={"/assets/red-heart.svg"}
                       alt="heart"
                       width={20}
                       height={20}
                       className="cursor-pointer object-contain"
-                      onClick={() => dislikePostMutate(_id) }
+                      onClick={() => dislikePostMutate({postId: _id, userId: userInfo?._id}) }
                     />
                   ) : (
                     <Image
@@ -149,7 +142,7 @@ const PostCard = ({
                       width={24}
                       height={24}
                       className="cursor-pointer object-contain"
-                      onClick={() => likPostMutate(_id)}
+                      onClick={() => likPostMutate({postId: _id, userId: userInfo?._id})}
                     />
                   )}
                 </button>

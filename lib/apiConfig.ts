@@ -29,7 +29,9 @@ export const updateUser = async ({
         path,
       },
     });
+    console.log(data);
     return data.message;
+
   } catch (error) {
     console.log(error);
     throw error;
@@ -118,24 +120,41 @@ export const fetchPosts = async (pageNumber = 1, pageSizeLimit = 20) => {
   }
 };
 
+export const fetchUserPosts = async (id: string) => {
+  console.log(id);
+  try {
+    const { data } = await axios({
+      url: `/api/users/${id}/posts`,
+      method: "GET",
+    });
+    console.log(data);
+
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 
 export const createCommentPost = async ({
-  text,  
+  text,
   postId,
   userId,
   path,
 }: {
-  text: string; 
+  text: string;
   postId: string,
   userId: string,
   path: string;
-}) => { 
+}) => {
   try {
     const { data } = await axios({
       url: `/api/comment/new`,
       method: "POST",
       data: {
-        text,  
+        text,
         postId,
         userId,
         path,
@@ -149,13 +168,17 @@ export const createCommentPost = async ({
   }
 };
 
-export const addLike = async ( id : string ) => {
+export const addLike = async ({ postId, userId }: { postId: string, userId: string }) => {
+  console.log(postId, userId);
   try {
     const { data } = await axios({
-      url: `/api/post/${id}/like`,
-      method: "PUT", 
+      url: `/api/post/like`,
+      method: "PUT",
+      data: {
+        postId, userId
+      }
     });
-    console.log(data);    
+    console.log(data);
     return data;
 
   } catch (error) {
@@ -164,13 +187,38 @@ export const addLike = async ( id : string ) => {
   }
 };
 
-export const removeLike = async ( id : string ) => {
+export const removeLike = async ({ postId, userId }: { postId: string, userId: string }) => {
   try {
     const { data } = await axios({
-      url: `/api/post/${id}/dislike`,
-      method: "PUT", 
+      url: `/api/post/dislike`,
+      method: "PUT",
+      data: {
+        postId, userId
+      }
     });
-    console.log(data);    
+    console.log(data);
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+
+export const searchUsers = async ({ userId, searchString }: { userId: string | undefined, searchString: string }) => {
+  console.log(userId, searchString);
+  
+  try {
+    const { data } = await axios({
+      url: `/api/users/search`,
+      method: "GET",
+      params: {
+        userId, 
+        searchString
+      }
+    });
+    console.log(data);
     return data;
 
   } catch (error) {

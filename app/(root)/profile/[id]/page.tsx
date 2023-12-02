@@ -2,13 +2,14 @@
 
 import React from "react";
 import ProfileHeader from "@/components/common/ProfileHeader";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/apiConfig";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import PostsTab from "@/components/common/PostsTab";
 
 const page = ({ params }: { params: { id: string } }) => {
   const { user } = useUser();
@@ -18,7 +19,8 @@ const page = ({ params }: { params: { id: string } }) => {
     queryKey: ["users", { id: params.id }],
     queryFn: () => fetchUser({ id: params.id }),
   });
-
+  console.log(userInfo);
+  
   //   if (userInfo) {
   //     if (!userInfo?.onboarded) redirect("/onboarding");
   //   }
@@ -55,6 +57,21 @@ const page = ({ params }: { params: { id: string } }) => {
               </TabsTrigger>
             ))}
           </TabsList>
+
+          {profileTabs.map((tab) => (
+            <TabsContent
+              key={`content-${tab.label}`}
+              value={tab.value}
+              className="w-full text-light-1"
+            >
+              <PostsTab
+                currentUserId={user?.id}
+                accountId={userInfo?.id}
+                dbId={userInfo?._id}
+                accountType={'User'}
+              />
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
     </div>
