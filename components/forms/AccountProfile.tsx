@@ -26,7 +26,7 @@ import { useMutation } from "@tanstack/react-query";
 interface Props {
   user: {
     id: string;
-    objectId: string;
+    // objectId: string;
     username: string;
     name: string;
     bio: string;
@@ -78,6 +78,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   const { mutate } = useMutation({
     mutationFn: updateUser,
     onSuccess: (data) => { 
+      console.log(data);      
       if (pathname === "/profile/edit") {
         router.back();
       } else {

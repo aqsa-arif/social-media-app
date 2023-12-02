@@ -26,6 +26,7 @@ export const PUT = async (
     }: Params = await req.json();
 
     const userId = params.id;
+    console.log(userId);    
 
     try {
         const user = await User.findOneAndUpdate(
@@ -39,9 +40,11 @@ export const PUT = async (
             }, { upsert: true, new: true }
         );
 
-        if (path === "/profile/edit") {
-            revalidatePath(path);  // Make sure the next time someone visits this specific page, they get the latest and freshest content, not what's saved in the cache
-        }
+        console.log(user);       
+
+        // if (path === "/profile/edit") {
+        //     revalidatePath(path);  // Make sure the next time someone visits this specific page, they get the latest and freshest content, not what's saved in the cache
+        // }
 
         return NextResponse.json({ message: "Updated successfully"});
 
@@ -62,8 +65,9 @@ export const GET = async (req: NextRequest, { params }: { params: { id: string }
         //  .populate({
         //     path: 'communities',
         //     model: 'Community'
-        //  });
-        console.log("User", user);
+        //  }); 
+        console.log('User =>>>>>>>>>>>>', user);
+        
         
         return NextResponse.json(user);
 

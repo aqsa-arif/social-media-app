@@ -1,19 +1,22 @@
 import Post from "@/lib/models/post.model";
+import { connectToDB } from "@/lib/mongoose";
 import { NextRequest, NextResponse } from "next/server";
+ 
 
+export const PUT = async (req: NextRequest ) => {
+    connectToDB();
 
-//  =======================
-//  Dislike post functionality
-//  =======================
-
-export const PUT = async (req: NextRequest, { params }: { params: { id: string } }) => {
+    const { postId, userId } = await req.json();
     try {
-        await Post.findByIdAndUpdate(
-            params.id,
+        const updated = await Post.findByIdAndUpdate(
+            postId,
             {
-                $pull: { likes: params.id }
+                $pull: { likes: userId }
             }
         )
+
+        console.log(updated);
+        
 
         return NextResponse.json({
             success: true,
