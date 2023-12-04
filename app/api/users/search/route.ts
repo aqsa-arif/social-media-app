@@ -3,10 +3,10 @@ import { connectToDB } from "@/lib/mongoose";
 import { FilterQuery } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
 
-    const userId = req.nextUrl.searchParams.get('userId') as string;
-    const searchString = req.nextUrl.searchParams.get('searchString') as string;
+    const { userId, searchString } = await req.json(); 
+    
     try {
         connectToDB();
         const regex = new RegExp(searchString, "i");

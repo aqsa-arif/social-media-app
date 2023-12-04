@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
     try {
-
-
         connectToDB();
-
-        const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') as string);
-        const pageSizeLimit = parseInt(req.nextUrl.searchParams.get('pageSizeLimit') as string);
+        
+        // const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') as string);
+        // const pageSizeLimit = parseInt(req.nextUrl.searchParams.get('pageSizeLimit') as string);
+        const pageNumber = 1;
+        const pageSizeLimit = 30;
 
         const skipamount = (pageNumber - 1) * pageSizeLimit;
 
