@@ -105,10 +105,10 @@ export const fetchPosts = async (pageNumber = 1, pageSizeLimit = 20) => {
     const { data } = await axios({
       url: `/api/post`,
       method: "GET",
-      params: {
-        pageNumber,
-        pageSizeLimit
-      }
+      // params: {
+      //   pageNumber,
+      //   pageSizeLimit
+      // }
     });
     return data;
 
@@ -206,8 +206,8 @@ export const searchUsers = async ({ userId, searchString }: { userId: string | u
   try {
     const { data } = await axios({
       url: `/api/users/search`,
-      method: "GET",
-      params: {
+      method: "POST",
+      data: {
         userId,
         searchString
       }
