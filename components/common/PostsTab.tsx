@@ -14,9 +14,9 @@ const PostsTab = ({ currentUserId, accountId, dbId, accountType }: Props) => {
   const { data: result } = useQuery({
     queryKey: ["posts", { id: accountId }],
     queryFn: () => fetchUserPosts(accountId),
-  }); 
+  });
 
-  if (result?.posts?.length < 1 ) 
+  if (result?.posts?.length < 1)
     return (
       <div className="w-fit mx-auto my-8">
         <p>Haven't created any posts yet.</p>
@@ -29,8 +29,12 @@ const PostsTab = ({ currentUserId, accountId, dbId, accountType }: Props) => {
         <PostCard
           key={post._id}
           {...post}
-          author={ 
-            accountType === "User" && { name: result.name, image: result.image, id: result.id } 
+          author={
+            accountType === "User" && {
+              name: result.name,
+              image: result.image,
+              id: result.id,
+            }
           }
           currentUserId={currentUserId}
           accountType={accountType}

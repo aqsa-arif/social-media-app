@@ -15,12 +15,10 @@ export const GET = async (req: NextRequest) => {
             id: { $ne: userId }
         }
 
-        // if(searchString.trim !== ""){
         query.$or = [
             { username: { $regex: regex } },
             { name: { $regex: regex } }
         ]
-        // }
 
         const usersQuery = await User.find(query).sort({ createdAt: 'desc' }).exec();
 

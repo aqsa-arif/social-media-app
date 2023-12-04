@@ -122,9 +122,9 @@ module.exports = {
         },
       ],
       "small-regular": [
-        "14px",
+        "16px",
         {
-          lineHeight: "140%",
+          lineHeight: "160%",
           fontWeight: "400",
         },
       ],
@@ -173,7 +173,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        "primary-500": "#877EFF",
+        "primary-500": "#9333ea",
         "secondary-500": "#FFB620",
         blue: "#0095F6",
         "logout-btn": "#FF5A5A",

@@ -24,18 +24,17 @@ const page = () => {
 
   const handleSearch = (text: string) => {
     setSearch(text);
-    
-    if(text.trim().length){
-        setIsSearched(true);
-    }else{
-        setIsSearched(false);
+
+    if (text.trim().length) {
+      setIsSearched(true);
+    } else {
+      setIsSearched(false);
     }
   };
 
   return (
     <section>
       <h1 className="head-text mb-10">Search</h1>
-      {JSON.stringify(search.length)}
 
       <Searchbar
         routeType="search"

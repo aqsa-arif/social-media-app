@@ -29,7 +29,7 @@ export const updateUser = async ({
         path,
       },
     });
-    console.log(data);
+    ;
     return data.message;
 
   } catch (error) {
@@ -72,14 +72,12 @@ export const createPost = async ({
 };
 
 export const fetchUser = async ({ id }: { id: string | undefined }) => {
-  console.log(id);
-
   try {
     const { data } = await axios({
       url: `/api/users/${id}`,
       method: "GET",
     });
-    console.log(data);
+    ;
     return data;
 
   } catch (error) {
@@ -121,13 +119,12 @@ export const fetchPosts = async (pageNumber = 1, pageSizeLimit = 20) => {
 };
 
 export const fetchUserPosts = async (id: string) => {
-  console.log(id);
   try {
     const { data } = await axios({
       url: `/api/users/${id}/posts`,
       method: "GET",
     });
-    console.log(data);
+    ;
 
     return data;
 
@@ -169,7 +166,6 @@ export const createCommentPost = async ({
 };
 
 export const addLike = async ({ postId, userId }: { postId: string, userId: string }) => {
-  console.log(postId, userId);
   try {
     const { data } = await axios({
       url: `/api/post/like`,
@@ -178,7 +174,7 @@ export const addLike = async ({ postId, userId }: { postId: string, userId: stri
         postId, userId
       }
     });
-    console.log(data);
+    ;
     return data;
 
   } catch (error) {
@@ -196,7 +192,7 @@ export const removeLike = async ({ postId, userId }: { postId: string, userId: s
         postId, userId
       }
     });
-    console.log(data);
+    ;
     return data;
 
   } catch (error) {
@@ -207,18 +203,32 @@ export const removeLike = async ({ postId, userId }: { postId: string, userId: s
 
 
 export const searchUsers = async ({ userId, searchString }: { userId: string | undefined, searchString: string }) => {
-  console.log(userId, searchString);
-  
   try {
     const { data } = await axios({
       url: `/api/users/search`,
       method: "GET",
       params: {
-        userId, 
+        userId,
         searchString
       }
     });
-    console.log(data);
+    ;
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+
+export const getUserActivity = async (id: string) => {
+  try {
+    const { data } = await axios({
+      url: `/api/users/activity/${id}`,
+      method: "GET",
+    });
+    ;
     return data;
 
   } catch (error) {

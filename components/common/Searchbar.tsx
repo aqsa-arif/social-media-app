@@ -2,19 +2,19 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { Input } from "../ui/input";
 
 interface Props {
   routeType: string;
-  search: string, 
+  search: string;
   handleSearch: (text: string) => void;
 }
 
-function Searchbar({ routeType, search, handleSearch } : Props) {
+function Searchbar({ routeType, search, handleSearch }: Props) {
   const router = useRouter();
-  
+
   // query after 0.3s of no input
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -29,20 +29,20 @@ function Searchbar({ routeType, search, handleSearch } : Props) {
   }, [search, routeType]);
 
   return (
-    <div className='searchbar'>
+    <div className="searchbar">
       <Image
-        src='/assets/search-gray.svg'
-        alt='search'
+        src="/assets/search-gray.svg"
+        alt="search"
         width={24}
         height={24}
-        className='object-contain'
+        className="object-contain"
       />
       <Input
-        id='text'
+        id="text"
         value={search}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder={"Search creators"}
-        className='no-focus searchbar_input'
+        className="no-focus searchbar_input"
       />
     </div>
   );
