@@ -10,9 +10,8 @@ export default function Home() {
 
   const { data: postsData } = useQuery({
     queryKey: ["posts"],
-    queryFn: () => fetchPosts(1, 30),
-    // refetchOnMount: true
-  });
+    queryFn: () => fetchPosts(1, 30), 
+  });   
 
   return (
     <div>
