@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: 'Roboto Condensed', sans-serif;
+}
 
 @layer components {
   /* main */
@@ -10,7 +16,7 @@
 
   /* Head Text */
   .head-text {
-    @apply text-heading2-bold text-light-1;
+    @apply  text-heading2-bold text-light-1;
   }
 
   /* Activity */
@@ -59,7 +65,7 @@
   }
 
   .topbar {
-    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-6;
   }
 
   .bottombar {
@@ -158,4 +164,8 @@
 
 .comment-form_btn {
   @apply rounded-3xl bg-primary-500 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full !important;
+}
+
+.cl-internal-b3fm6y {
+  @apply hidden;
 }

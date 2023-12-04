@@ -1,11 +1,9 @@
 "use client";
 
-import { createCommentPost, createPost, fetchUser } from "@/lib/apiConfig";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { redirect } from "next/navigation";
+import { createCommentPost } from "@/lib/apiConfig";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 
-import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,9 +17,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUploadThing } from "@/lib/uploadthing";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation"; 
 import { useMutation } from "@tanstack/react-query";
 
 interface Props {
@@ -33,22 +29,8 @@ interface Props {
 const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
   console.log(postId, userImgUrl, userId);
 
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname(); 
   const queryClient = useQueryClient();
-
-  // const { data: userInfo, error } = useQuery({
-  //   queryKey: ["users", { id: userId }],
-  //   queryFn: () => fetchUser({ id: userId }),
-  // // });
-
-  // if (userInfo) {
-  //   if (!userInfo?.onboarded) redirect("/onboarding");
-  //   console.log(userInfo);
-  // }
-  // if (error) {
-  //   console.log(error);
-  // }
 
   const form = useForm({
     resolver: zodResolver(CommentValidation),
@@ -60,8 +42,8 @@ const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
   const { mutate } = useMutation({
     mutationFn: createCommentPost,
     onSuccess: (data) => {
-      form.reset(); 
-      queryClient.invalidateQueries({ queryKey: ["posts"], })      
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      form.reset();
     },
     onError: (error) => {
       console.log(error);
@@ -91,7 +73,7 @@ const CommentForm = ({ postId, userImgUrl, userId }: Props) => {
                     loader={() => userImgUrl}
                     src={userImgUrl}
                     alt="Profile Image"
-                    fill 
+                    fill
                     className="rounded-full"
                   />
                 </div>

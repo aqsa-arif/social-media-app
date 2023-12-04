@@ -43,23 +43,19 @@ const PostCard = ({
   likes,
   currentUserId,
   isComment,
-}: Props) => { 
+}: Props) => {
   const { user } = useUser();
-  const queryClient = useQueryClient(); 
-   
+  const queryClient = useQueryClient();
+
   const { data: userInfo } = useQuery({
     queryKey: ["users", { id: user?.id }],
     queryFn: () => fetchUser({ id: user?.id }),
   });
-  console.log(userInfo);
-  console.log(likes);
-  
 
   const { mutate: likPostMutate } = useMutation({
     mutationFn: addLike,
     onSuccess: (data) => {
-      if (data.success) {
-        console.log(data);
+      if (data.success) { 
         queryClient.invalidateQueries({ queryKey: ["posts"] });
       }
     },
@@ -123,9 +119,9 @@ const PostCard = ({
               />
             )}
 
-            <div className={`mt-5 flex flex-col gap-3 ${isComment && 'mb-10'}`}>
+            <div className={`mt-5 flex flex-col gap-3 ${isComment && "mb-10"}`}>
               <div className="flex gap-3.5">
-                <button type="button" > 
+                <button type="button">
                   {likes?.length && likes.includes(userInfo?._id) ? (
                     <Image
                       src={"/assets/red-heart.svg"}
@@ -133,7 +129,12 @@ const PostCard = ({
                       width={20}
                       height={20}
                       className="cursor-pointer object-contain"
-                      onClick={() => dislikePostMutate({postId: _id, userId: userInfo?._id}) }
+                      onClick={() =>
+                        dislikePostMutate({
+                          postId: _id,
+                          userId: userInfo?._id,
+                        })
+                      }
                     />
                   ) : (
                     <Image
@@ -142,7 +143,9 @@ const PostCard = ({
                       width={24}
                       height={24}
                       className="cursor-pointer object-contain"
-                      onClick={() => likPostMutate({postId: _id, userId: userInfo?._id})}
+                      onClick={() =>
+                        likPostMutate({ postId: _id, userId: userInfo?._id })
+                      }
                     />
                   )}
                 </button>
@@ -173,22 +176,22 @@ const PostCard = ({
               </div>
 
               <div className="flex items-center gap-4">
-              {children?.length > 0 && (
-                <Link href={`/posts/${_id}`}>
-                  <p className="mt-1 text-subtle-medium text-gray-1">
-                    {children.length} { children.length > 1 ? 'replies' : 'reply'}  
-                  </p>
-                </Link>
-              )} 
+                {children?.length > 0 && (
+                  <Link href={`/posts/${_id}`}>
+                    <p className="mt-1 text-subtle-medium text-gray-1">
+                      {children.length}{" "}
+                      {children.length > 1 ? "replies" : "reply"}
+                    </p>
+                  </Link>
+                )}
 
-              {likes && likes?.length > 0 && (
-                <p className="mt-1 text-subtle-medium text-gray-1">
-                  {" "}
-                 {likes.length} {likes?.length > 1 ? 'likes' : 'like'} 
-                </p>
-              )}
+                {likes && likes?.length > 0 && (
+                  <p className="mt-1 text-subtle-medium text-gray-1">
+                    {" "}
+                    {likes.length} {likes?.length > 1 ? "likes" : "like"}
+                  </p>
+                )}
               </div>
-              
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import Post from "@/lib/models/post.model";
 import User from "@/lib/models/user.model";
-import { connectToDB } from "@/lib/mongoose"; 
+import { connectToDB } from "@/lib/mongoose";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,18 +8,16 @@ interface Params {
     text: string,
     photo: string | null,
     author: string,
-    // communityId: string | null,
     path: string
 }
 
-export const POST = async (req: NextRequest) => {     
-    connectToDB(); 
-    
+export const POST = async (req: NextRequest) => {
+    connectToDB();
+
     const {
         text,
         photo,
         author,
-        // communityId,
         path
     }: Params = await req.json();
 
@@ -27,8 +25,7 @@ export const POST = async (req: NextRequest) => {
         const createdPost = await Post.create({
             text,
             photo,
-            author,
-            community: null
+            author, 
         })
 
         // Update User model

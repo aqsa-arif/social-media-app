@@ -1,4 +1,4 @@
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
     text: {
@@ -23,15 +23,15 @@ const postSchema = new mongoose.Schema({
         type: String
     },
     likes: {
-        type: [String], 
-        default: [] 
+        type: [String],
+        default: []
     },
     children: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Post'
         }
-    ]
+    ],
 })
 
 const Post = mongoose.models.Post || mongoose.model('Post', postSchema);

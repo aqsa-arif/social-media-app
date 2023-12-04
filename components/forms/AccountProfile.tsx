@@ -1,6 +1,4 @@
-"use client";
-
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -12,6 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,7 +25,7 @@ import { useMutation } from "@tanstack/react-query";
 interface Props {
   user: {
     id: string;
-    // objectId: string;
+    objectId: string;
     username: string;
     name: string;
     bio: string;
@@ -37,20 +36,30 @@ interface Props {
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
-  const { startUpload } = useUploadThing("media");   
+  const { startUpload } = useUploadThing("media");
 
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useRouter(); 
 
   const form = useForm({
     resolver: zodResolver(userValidation),
     defaultValues: {
-      profile_photo: user.image || "",
-      name: user.name || "",
-      username: user.username || "",
-      bio: user.bio || "",
+      profile_photo: user?.image,
+      name: user?.name,
+      username: user?.username,
+      bio: user?.bio,
     },
-  });
+  }); 
+
+  // When user data is available, update the form defaultValues
+  useEffect(() => {
+    form.reset({
+      profile_photo: user?.image,
+      name: user?.name,
+      username: user?.username,
+      bio: user?.bio,
+    });
+  }, [user]);  
 
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
@@ -77,13 +86,8 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
   const { mutate } = useMutation({
     mutationFn: updateUser,
-    onSuccess: (data) => { 
-      console.log(data);      
-      if (pathname === "/profile/edit") {
-        router.back();
-      } else {
-        router.push("/");
-      }
+    onSuccess: (data) => {
+      router.push("/home");
     },
   });
 
@@ -96,8 +100,8 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       if (imgRes && imgRes[0].url) {
         values.profile_photo = imgRes[0].url;
       }
-    } 
-    
+    }
+
     mutate({
       id: user.id,
       name: values.name,
@@ -122,6 +126,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
               <FormLabel className="account-form_image-label">
                 {field.value ? (
                   <Image
+                    loader={() =>  field.value }
                     src={field.value}
                     alt="Profile Photo"
                     width={96}
@@ -130,6 +135,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   />
                 ) : (
                   <Image
+                    loader={() => 'assets/profile.svg' }
                     src="assets/profile.svg"
                     alt="Profile Photo"
                     width={24}
@@ -147,6 +153,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -166,6 +173,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -185,6 +193,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -204,12 +213,13 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
 
         <Button type="submit" className="bg-primary-500">
-          Submit
+          {btnTitle}
         </Button>
       </form>
     </Form>

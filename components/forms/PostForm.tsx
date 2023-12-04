@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { isBase64Image } from "@/lib/utils";
-import { useUploadThing } from "@/lib/uploadthing"; 
+import { useUploadThing } from "@/lib/uploadthing";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
@@ -38,10 +38,6 @@ const PostForm = ({ userId }: { userId: string }) => {
     queryFn: () => fetchUser({ id: userId }),
   });
 
-  if (userInfo) {
-    if (!userInfo?.onboarded) redirect("/onboarding");
-    console.log(userInfo);
-  }
   if (error) {
     console.log(error);
   }
@@ -61,19 +57,16 @@ const PostForm = ({ userId }: { userId: string }) => {
   ) => {
     e.preventDefault();
 
-    const fileReader = new FileReader(); // Allows asynchronous reading of files.
+    const fileReader = new FileReader();
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setFiles(Array.from(e.target.files));
 
-      // if (!file.type.includes("image")) return;
-
-      // Sets up an event handler to execute when the file reading operation is successfully completed.
       fileReader.onload = async (event) => {
         const imgDataUrl = event.target?.result?.toString() || "";
         fieldChange(imgDataUrl);
       };
-      //readAsDataURL tells fileReader to read the contents of the specified file and generate a data URL  => data URL represents the image data encoded as a string. This string can be used directly within application
+
       fileReader.readAsDataURL(file);
     }
   };
@@ -82,7 +75,7 @@ const PostForm = ({ userId }: { userId: string }) => {
     mutationFn: createPost,
     onSuccess: (data) => {
       console.log(data);
-      router.push("/");
+      router.push("/home");
     },
     onError: (error) => {
       console.log(error);
@@ -104,7 +97,7 @@ const PostForm = ({ userId }: { userId: string }) => {
     mutate({
       text: values.post,
       photo: values.photo,
-      author: userInfo._id,
+      author: userInfo?._id,
       communityId: null,
       path: pathname,
     });
@@ -123,7 +116,7 @@ const PostForm = ({ userId }: { userId: string }) => {
             <FormItem className="flex items-center gap-4">
               <FormLabel className="account-form_image-label">
                 {field.value ? (
-                  <Image
+                  <Image 
                     src={field.value}
                     alt="Profile Photo"
                     width={96}
@@ -132,6 +125,7 @@ const PostForm = ({ userId }: { userId: string }) => {
                   />
                 ) : (
                   <Image
+                    loader={() => "assets/profile.svg"}
                     src="assets/profile.svg"
                     alt="Profile Photo"
                     width={24}

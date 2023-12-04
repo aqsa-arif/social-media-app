@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
-    console.log(params.id);
     try {
         const post = await Post.findById(params.id)
             .populate({
@@ -31,8 +30,6 @@ export const GET = async (req: NextRequest, { params }: { params: { id: string }
                     },
                 ]
             });
-
-        console.log(post);
 
         return NextResponse.json(post);
 
