@@ -1,7 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import TanstackProvider from "@/components/TanstackProvider";
-import './globals.css'
+import { dark } from '@clerk/themes';
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
       <TanstackProvider>
         <html lang="en">
           <body className={`${inter.className} bg-dark-1`}>
