@@ -1,4 +1,4 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { createUploadthing, type FileRouter  } from "uploadthing/next";
 import { currentUser } from "@clerk/nextjs";
  
 const f = createUploadthing();
@@ -27,7 +27,8 @@ export const ourFileRouter = {
       console.log("file url", file.url);
  
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+      return { uploadedBy: metadata.userId } ;
+
     }),
 } satisfies FileRouter;
  
