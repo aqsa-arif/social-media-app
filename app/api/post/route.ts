@@ -17,8 +17,8 @@ export const GET = async (req: NextRequest) => {
         // Fetch posts that have no parents 
         const postQuery = Post.find({ parentId: { $in: [null, undefined] } })
             .sort({ createdAt: 'desc' })
-            .skip(skipamount)
-            .limit(pageSizeLimit)
+            // .skip(skipamount)
+            // .limit(pageSizeLimit)
             .populate({ path: 'author', model: User })
             .populate({
                 path: 'children',
@@ -32,9 +32,9 @@ export const GET = async (req: NextRequest) => {
         const totalPostsCount = await Post.countDocuments({ parentId: { $in: [null, undefined] } });
         const posts = await postQuery.exec();
 
-        const isNext = totalPostsCount > posts.length + skipamount;
+        // const isNext = totalPostsCount > posts.length + skipamount;
 
-        return NextResponse.json({ posts, isNext });
+        return NextResponse.json({ posts });
 
     } catch (error : any) {
         console.log(error);
